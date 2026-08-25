@@ -1,23 +1,26 @@
-const { default: makeWASocket, useMultiFileAuthState, delay } = require('@whiskeysockets/baileys');
+const { default: makeWASocket, useMultiFileAuthState, DisconnectReason } = require('@whiskeysockets/baileys');
 const P = require('pino');
-const OWNER = '393887347002';
+const fs = require('fs');
 
 async function start() {
-  const { state, saveCreds } = await useMultiFileAuthState('./auth_info');
-  const sock = makeWASocket({ auth: state, logger: P({ level: 'silent' }), browser: ['Ubuntu','Chrome','120'] });
-  sock.ev.on('creds.update', saveCreds);
-  sock.ev.on('connection.update', async (u) => {
-    const { connection } = u;
-    if (connection === 'open') {
-      console.log('CONNESSO ✅');
-      require('./core/bot.js').init(sock);
-    }
-    if (connection === 'close') { await delay(3000); start(); }
-  });
-  if (!state.creds.registered) {
-    await delay(4000);
-    const code = await sock.requestPairingCode(OWNER);
-    console.log(`CODICE: ${code}`);
-  }
+    const { state, saveCreds } = await useMultiFileAuthState('./auth');
+    const sock = makeWASocket({
+        auth: state,
+        logger: P({ level: 'silent' }),
+        printQRInTerminal: true
+    });
+
+    const botCore = require('./core/bot.js');
+    botCore.init(sock);
+
+    sock.ev.on('creds.update', saveCreds);
+    sock.ev.on('connection.update', (u) => {
+        const { connection, lastDisconnect } = u;
+        if (connection === 'close') {
+            const shouldReconnect = lastDisconnect?.error?.output?.statusCode !== DisconnectReason.loggedOut;
+            if (shouldReconnect) start();
+        }
+    });
 }
+
 start();
