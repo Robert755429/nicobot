@@ -1,4 +1,4 @@
-const { default: makeWASocket, useMultiFileAuthState, delay } = require('@itsukichan/baileys');
+const { default: makeWASocket, useMultiFileAuthState, delay } = require('@whiskeysockets/baileys');
 const P = require('pino');
 const OWNER = '393887347002';
 
