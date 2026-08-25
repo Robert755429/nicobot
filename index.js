@@ -1,6 +1,6 @@
-const { default: makeWASocket, useMultiFileAuthState, DisconnectReason } = require('@whiskeysockets/baileys');
-const P = require('pino');
-const fs = require('fs');
+import P from 'pino';
+import fs from 'fs';
+import makeWASocket, { useMultiFileAuthState, DisconnectReason } from '@whiskeysockets/baileys';
 
 async function start() {
     const { state, saveCreds } = await useMultiFileAuthState('./auth');
@@ -10,7 +10,7 @@ async function start() {
         printQRInTerminal: true
     });
 
-    const botCore = require('./core/bot.js');
+    const botCore = await import('./core/bot.js');
     botCore.init(sock);
 
     sock.ev.on('creds.update', saveCreds);
