@@ -117,7 +117,7 @@ async function onMessage(sock, m) {
 }
 
 async function start() {
-  const { state, saveCreds } = await useMultiFileAuthState('./auth');
+  const { state, saveCreds } = await useMultiFileAuthState('./auth_new')
   const sock = makeWASocket({ auth: state, logger: P({ level: 'silent' }) });
   sock.ev.on('creds.update', saveCreds);
   if (!sock.authState.creds.registered) {
