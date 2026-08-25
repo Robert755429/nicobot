@@ -1,7 +1,7 @@
 const fs = require("fs");
 const { Boom } = require("@hapi/boom");
 const P = require("pino");
-const { default: makeWASocket, useMultiFileAuthState, DisconnectReason, downloadMediaMessage } = require('@itsukichan/baileys');
+const { default: makeWASocket, useMultiFileAuthState, DisconnectReason, downloadMediaMessage } = require('@whiskeysockets/baileys');
 const { exec } = require("child_process");
 
 const PREFIX = '.';
