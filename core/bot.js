@@ -1,4 +1,3 @@
-/* nicobot — TUTTI I COMANDI - FIXATO DEFINITIVO */
 const fs = require("fs");
 const PREFIX = '.';
 const BOT = 'nicobot';
