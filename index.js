@@ -1,5 +1,3 @@
-import { createRequire } from 'module';
-const require = createRequire(import.meta.url);
 import * as baileys from '@whiskeysockets/baileys';
 const { default: makeWASocket, useMultiFileAuthState } = baileys;
 
@@ -11,12 +9,9 @@ async function start() {
     browser: ["Ubuntu", "Chrome", "20.0.04"]
   });
   sock.ev.on('creds.update', saveCreds);
-  try {
-    const core = require('./core/bot.js');
-    (core.default || core)(sock);
-  } catch(e){}
+  
   if (!state.creds.registered) {
-    const numero = "393887347002"; // METTI QUI TUO NUMERO
+    const numero = "393887347002";
     await new Promise(r => setTimeout(r, 3000));
     const code = await sock.requestPairingCode(numero);
     console.log("CODICE PAIRING: " + code);
