@@ -1,6 +1,6 @@
 import makeWASocket, { useMultiFileAuthState } from '@whiskeysockets/baileys'
 
-const PAIRING_NUMBER = '39INSERISCIQUIILTUONUMERO' // es. 393331234567
+const PAIRING_NUMBER = '393887347002' // es. 393331234567
 
 async function start() {
   const { state, saveCreds } = await useMultiFileAuthState('auth_info_baileys')
