@@ -1,20 +1,24 @@
-import * as baileys from '@whiskeysockets/baileys';
-const { default: makeWASocket, useMultiFileAuthState } = baileys;
+import makeWASocket, { useMultiFileAuthState } from '@whiskeysockets/baileys'
+
+const PAIRING_NUMBER = '39INSERISCIQUIILTUONUMERO' // es. 393331234567
 
 async function start() {
-  const { state, saveCreds } = await useMultiFileAuthState('./auth_info');
+  const { state, saveCreds } = await useMultiFileAuthState('auth_info_baileys')
   const sock = makeWASocket({
     auth: state,
     printQRInTerminal: false,
-    browser: ["Ubuntu", "Chrome", "20.0.04"]
-  });
-  sock.ev.on('creds.update', saveCreds);
-  
-  if (!state.creds.registered) {
-    const numero = "393887347002";
-    await new Promise(r => setTimeout(r, 3000));
-    const code = await sock.requestPairingCode(numero);
-    console.log("CODICE PAIRING: " + code);
+    logger: { level: 'silent' },
+    browser: ['NicoBot','Chrome','1.0']
+  })
+  if(!sock.authState.creds.registered){
+    setTimeout(async () => {
+      let code = await sock.requestPairingCode(PAIRING_NUMBER)
+      console.log('Pairing code:', code)
+    }, 3000)
   }
+  sock.ev.on('creds.update', saveCreds)
+  sock.ev.on('connection.update', ({connection}) => {
+    if(connection === 'open') console.log('✅ Connesso!')
+  })
 }
-start();
+start()
